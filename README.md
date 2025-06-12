@@ -20,13 +20,13 @@
 
 ## 5. Experiments & Results
 - **SAE Variants:** Gemma-2-2b (16 k features), Gemma-2-9b (131 k features)  
-- **Feature Selection (SAE):** Top-$k$ features where  
+- **Feature Selection (SAE):** Top-k features where  
   - $k \in \{500, 1000, 1500, 2000, 2500\}$ for SAE on Gemma-2-2b  
   - $k \in \{3000, 3500, 4000, 4500, 5000, 5500, 6000\}$ for SAE on Gemma-2-9b  
 - **Baseline Models:**  
   1. SAE features **without** selection  
-     - Multi-Layer Perceptron (MLP)  
+     - MLP 
      - XGBoost  
-  2. Gemma-2 last hidden state (CLS)  
+  2. Gemma-2 last hidden state
      - MLP  
-     - Logistic Regression (LR)  
+     - LR 
