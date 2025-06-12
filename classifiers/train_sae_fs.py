@@ -1,5 +1,4 @@
 """
-Path: classifiers/train_sae_fs.py
 Train logistic regression on SAE features with ANOVA feature importance ranking,
 selecting top-K features automatically for specified SAE variants.
 """

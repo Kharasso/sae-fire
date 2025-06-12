@@ -1,5 +1,4 @@
 """
-Path: classifiers/train_baselines.py
 Train baseline classifiers:
  - SAE features without FS: MLP & XGBoost
  - CLS features (last hidden): MLP & LR
