@@ -1,6 +1,6 @@
 # SAE-FiRE: Sparse Autoencoder for Financial Representation Enhancement
 
-[text](diagrams/architecture7.pdf)
+<embed src="./diagrams/architecture7.png" width="100%" height="600px" />
 
 ## 1. Data Acquisition
 - Raw transcript JSONL files and metadata CSVs  
