@@ -1,49 +1,43 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-FEATURE_ROOT="data/doc_features"
-OUT_ROOT="results/predictions"
+# SAE FS experiments (LR only)
+FEATURE_ROOT="data/doc_features/sae"
+OUT_ROOT="results/predictions/sae_fs"
+VARIANTS=("sae_2b" "sae_9b_131k")
 
-SAE_VARIANTS=("sae_2b" "sae_9b_16k" "sae_9b_131k")
-CLS_VARIANTS=("cls_gemma_2b" "cls_gemma_9b" "cls_qwen_4b" "cls_llama_3b")
-METHODS=("none" "anova" "tree")
-MODELS=("rf" "gb" "lr")
-TEST_SIZE=0.2
-
-# SAE experiments
-for sae in "${SAE_VARIANTS[@]}"; do
-  for method in "${METHODS[@]}"; do
-    for model in "${MODELS[@]}"; do
-      in_dir="$FEATURE_ROOT/sae/$sae"
-      out_dir="$OUT_ROOT/sae/${sae}/${method}/${model}"
-      echo "→ $model with $method on $sae"
-      python classifiers/train_classifier.py \
-        --feature-dir "$in_dir" \
-        --out-dir "$out_dir" \
-        --selection "$method" \
-        --k 1000 \
-        --threshold median \
-        --model "$model" \
-        --test-size $TEST_SIZE
-    done
-  done
+for var in "${VARIANTS[@]}"; do
+  in_dir="$FEATURE_ROOT/$var"
+  out_dir="$OUT_ROOT/$var"
+  echo "→ SAE FS LR for $var"
+  python classifiers/train_sae_fs.py \
+    --feature-dir "$in_dir" \
+    --out-dir "$out_dir" \
+    --test-size 0.2
 done
 
-# CLS experiments
-for cls in "${CLS_VARIANTS[@]}"; do
-  for method in "${METHODS[@]}"; do
-    for model in "${MODELS[@]}"; do
-      in_dir="$FEATURE_ROOT/cls/$cls"
-      out_dir="$OUT_ROOT/cls/${cls}/${method}/${model}"
-      echo "→ $model with $method on $cls"
-      python classifiers/train_classifier.py \
-        --feature-dir "$in_dir" \
-        --out-dir "$out_dir" \
-        --selection "$method" \
-        --k 1000 \
-        --threshold median \
-        --model "$model" \
-        --test-size $TEST_SIZE
-    done
-  done
+# Baseline experiments
+FEATURE_ROOT="data/doc_features"
+OUT_ROOT="results/predictions/baseline"
+
+# SAE baseline (MLP + XGBoost)
+for var in sae_2b sae_9b_131k; do
+  in_dir="$FEATURE_ROOT/sae/$var"
+  out_dir="$OUT_ROOT/sae_baseline/$var"
+  echo "→ SAE baseline for $var"
+  python classifiers/train_baselines.py \
+    --feature-dir "$in_dir" \
+    --out-dir "$out_dir" \
+    --test-size 0.2
+done
+
+# CLS baseline (MLP + LR)
+for var in cls_gemma_2b cls_gemma_9b cls_qwen_4b cls_llama_3b; do
+  in_dir="$FEATURE_ROOT/cls/$var"
+  out_dir="$OUT_ROOT/cls_baseline/$var"
+  echo "→ CLS baseline for $var"
+  python classifiers/train_baselines.py \
+    --feature-dir "$in_dir" \
+    --out-dir "$out_dir" \
+    --test-size 0.2
 done
