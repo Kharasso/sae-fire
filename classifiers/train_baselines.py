@@ -1,8 +1,3 @@
-"""
-Train baseline classifiers:
- - SAE features without FS: MLP & XGBoost
- - CLS features (last hidden): MLP & LR
-"""
 import os
 import argparse
 import numpy as np

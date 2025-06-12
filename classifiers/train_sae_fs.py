@@ -1,7 +1,3 @@
-"""
-Train logistic regression on SAE features with ANOVA feature importance ranking,
-selecting top-K features automatically for specified SAE variants.
-"""
 import os
 import argparse
 import numpy as np
